@@ -11,10 +11,40 @@ public class EventManager {
     private CSVHandler csvHandler;
     private List<Event> events;
     private List<RecurringEvent> recurringEvents;
+    private int nextEventId;
 
     public EventManager() {
         this.csvHandler = new CSVHandler();
         loadData();
+        updateNextEventId();
+    }
+
+    /**
+     * Update the next event ID based on existing events
+     * Resets to 1 if no events exist
+     */
+    private void updateNextEventId() {
+        // If no events exist, reset to 1
+        if (events.isEmpty()) {
+            nextEventId = 1;
+            return;
+        }
+
+        // Otherwise, find the max ID and increment
+        int maxId = 0;
+        for (Event event : events) {
+            if (event.getEventId() > maxId) {
+                maxId = event.getEventId();
+            }
+        }
+        nextEventId = maxId + 1;
+    }
+
+    /**
+     * Get the next event ID and increment the counter
+     */
+    private int getAndIncrementEventId() {
+        return nextEventId++;
     }
 
     /**
@@ -23,6 +53,7 @@ public class EventManager {
     private void loadData() {
         events = csvHandler.readEvents();
         recurringEvents = csvHandler.readRecurringEvents();
+        updateNextEventId();
     }
 
     /**
@@ -37,7 +68,7 @@ public class EventManager {
      * Create a new event
      */
     public Event createEvent(String title, String description, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        int eventId = csvHandler.getNextEventId();
+        int eventId = getAndIncrementEventId();
         Event event = new Event(eventId, title, description, startDateTime, endDateTime);
         events.add(event);
         saveData();
@@ -87,8 +118,8 @@ public class EventManager {
 
             // Skip the first instance as it's already created
             if (instancesCreated > 0) {
-                int eventId = csvHandler.getNextEventId();
-                Event recurringInstance = new Event(eventId, baseEvent.getTitle(), 
+                int eventId = getAndIncrementEventId();
+                Event recurringInstance = new Event(eventId, baseEvent.getTitle(),
                                                   baseEvent.getDescription(), currentStart, currentEnd);
                 events.add(recurringInstance);
             }
@@ -147,6 +178,9 @@ public class EventManager {
             // Also remove recurring configuration if it exists
             recurringEvents.removeIf(re -> re.getEventId() == eventId);
             
+            // Reset event ID counter if no events remain
+            updateNextEventId();
+
             saveData();
             return true;
         }
@@ -236,5 +270,13 @@ public class EventManager {
                        return (start.isBefore(e.getEndDateTime()) && end.isAfter(e.getStartDateTime()));
                    })
                    .collect(Collectors.toList());
+    }
+
+    /**
+     * Get the next event ID that will be assigned
+     * Useful for testing and debugging
+     */
+    public int getNextEventId() {
+        return nextEventId;
     }
 }

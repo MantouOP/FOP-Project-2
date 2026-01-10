@@ -36,23 +36,23 @@ public class CalendarGUI {
 
         // Add title and month selector panel at top
         JPanel titleMonthPanel = new JPanel(new BorderLayout());
-        titleMonthPanel.setBackground(new Color(0xF5F5F5));
+        titleMonthPanel.setBackground(new Color(0xE9EEF4));
         titleMonthPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Left side: Title
         titleLabel = new JLabel("Calendar");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setForeground(new Color(0x333333));
+        titleLabel.setForeground(new Color(0x8688AD));
 
         // Center: Month/Year tabs with navigation
         JPanel monthTabPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
-        monthTabPanel.setBackground(new Color(0xF5F5F5));
+        monthTabPanel.setBackground(new Color(0xE9EEF4));
 
         JButton prevTabBtn = new JButton("◀");
         prevTabBtn.setToolTipText("Previous month");
-        prevTabBtn.setBackground(Color.WHITE);
-        prevTabBtn.setForeground(Color.BLACK);
-        prevTabBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xE0E0E0), 1));
+        prevTabBtn.setBackground(new Color(0xBBC4F4));
+        prevTabBtn.setForeground(Color.WHITE);
+        prevTabBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0x8EBAF4), 1));
         prevTabBtn.setPreferredSize(new Dimension(40, 36));
         prevTabBtn.addActionListener(e -> navigatePreviousMonth());
 
@@ -65,13 +65,13 @@ public class CalendarGUI {
         yearField = new JTextField(String.valueOf(LocalDate.now().getYear()), 6);
         yearField.setPreferredSize(new Dimension(60, 36));
         yearField.setBackground(Color.WHITE);
-        yearField.setForeground(new Color(0x333333));
+        yearField.setForeground(new Color(0x8688AD));
 
         JButton nextTabBtn = new JButton("▶");
         nextTabBtn.setToolTipText("Next month");
-        nextTabBtn.setBackground(Color.WHITE);
-        nextTabBtn.setForeground(Color.BLACK);
-        nextTabBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xE0E0E0), 1));
+        nextTabBtn.setBackground(new Color(0xBBC4F4));
+        nextTabBtn.setForeground(Color.WHITE);
+        nextTabBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0x8EBAF4), 1));
         nextTabBtn.setPreferredSize(new Dimension(40, 36));
         nextTabBtn.addActionListener(e -> navigateNextMonth());
 
@@ -89,77 +89,77 @@ public class CalendarGUI {
 
         // Feature buttons panel - Row 1
         JPanel featureButtonsPanel = new JPanel(new GridLayout(2, 5, 8, 8));
-        featureButtonsPanel.setBackground(new Color(0xF5F5F5));
+        featureButtonsPanel.setBackground(new Color(0xE9EEF4));
         featureButtonsPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
         JButton createEventBtn = new JButton("➕ Create Event");
         createEventBtn.setBackground(Color.WHITE);
-        createEventBtn.setForeground(new Color(0x007AFF));
-        createEventBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xE0E0E0), 1));
+        createEventBtn.setForeground(new Color(0x758BED));
+        createEventBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xBBC4F4), 1));
         createEventBtn.setToolTipText("Create a new single event with title, description, start and end times");
         createEventBtn.addActionListener(e -> showCreateEventDialog());
 
         JButton createRecurringBtn = new JButton("🔄 Recurring Event");
         createRecurringBtn.setBackground(Color.WHITE);
-        createRecurringBtn.setForeground(new Color(0x007AFF));
-        createRecurringBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xE0E0E0), 1));
+        createRecurringBtn.setForeground(new Color(0x758BED));
+        createRecurringBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xBBC4F4), 1));
         createRecurringBtn.setToolTipText("Create repeating events (daily, weekly, bi-weekly, or monthly) with specified occurrences");
         createRecurringBtn.addActionListener(e -> showCreateRecurringEventDialog());
 
         JButton searchBtn = new JButton("🔍 Search Events");
         searchBtn.setBackground(Color.WHITE);
-        searchBtn.setForeground(new Color(0x007AFF));
-        searchBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xE0E0E0), 1));
+        searchBtn.setForeground(new Color(0x758BED));
+        searchBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xBBC4F4), 1));
         searchBtn.setToolTipText("Search events by date, title, or date range to find specific events");
         searchBtn.addActionListener(e -> showSearchDialog());
 
         JButton editDeleteBtn = new JButton("✏️ Edit/Delete");
         editDeleteBtn.setBackground(Color.WHITE);
-        editDeleteBtn.setForeground(new Color(0x007AFF));
-        editDeleteBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xE0E0E0), 1));
+        editDeleteBtn.setForeground(new Color(0x758BED));
+        editDeleteBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xBBC4F4), 1));
         editDeleteBtn.setToolTipText("Find an event by ID, then update its details or remove it completely");
         editDeleteBtn.addActionListener(e -> showEditDeleteDialog());
 
         JButton backupBtn = new JButton("💾 Backup/Restore");
         backupBtn.setBackground(Color.WHITE);
-        backupBtn.setForeground(new Color(0x007AFF));
-        backupBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xE0E0E0), 1));
+        backupBtn.setForeground(new Color(0x758BED));
+        backupBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xBBC4F4), 1));
         backupBtn.setToolTipText("Save all events to a backup file or restore from a previously saved backup");
         backupBtn.addActionListener(e -> showBackupDialog());
 
         // Row 2 buttons
         JButton weekViewBtn = new JButton("📅 Week View");
         weekViewBtn.setBackground(Color.WHITE);
-        weekViewBtn.setForeground(new Color(0x007AFF));
-        weekViewBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xE0E0E0), 1));
+        weekViewBtn.setForeground(new Color(0x758BED));
+        weekViewBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xBBC4F4), 1));
         weekViewBtn.setToolTipText("View all events for a specific week in a day-by-day format");
         weekViewBtn.addActionListener(e -> showWeekViewDialog());
 
         JButton listBtn = new JButton("📋 List View");
         listBtn.setBackground(Color.WHITE);
-        listBtn.setForeground(new Color(0x007AFF));
-        listBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xE0E0E0), 1));
+        listBtn.setForeground(new Color(0x758BED));
+        listBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xBBC4F4), 1));
         listBtn.setToolTipText("Display events within a date range as a sorted list");
         listBtn.addActionListener(e -> showListViewDialog());
 
         JButton remindersBtn = new JButton("🔔 Reminders");
         remindersBtn.setBackground(Color.WHITE);
-        remindersBtn.setForeground(new Color(0x007AFF));
-        remindersBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xE0E0E0), 1));
+        remindersBtn.setForeground(new Color(0x758BED));
+        remindersBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xBBC4F4), 1));
         remindersBtn.setToolTipText("View upcoming events scheduled to start within a specified time window");
         remindersBtn.addActionListener(e -> showRemindersDialog());
 
         JButton statsBtn = new JButton("📊 Statistics");
         statsBtn.setBackground(Color.WHITE);
-        statsBtn.setForeground(new Color(0x007AFF));
-        statsBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xE0E0E0), 1));
+        statsBtn.setForeground(new Color(0x758BED));
+        statsBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xBBC4F4), 1));
         statsBtn.setToolTipText("View calendar analytics: total events, events by month, busiest days, and upcoming events");
         statsBtn.addActionListener(e -> showStatisticsDialog());
 
         JButton calendarViewBtn = new JButton("📅 Calendar View");
         calendarViewBtn.setBackground(Color.WHITE);
-        calendarViewBtn.setForeground(new Color(0x007AFF));
-        calendarViewBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xE0E0E0), 1));
+        calendarViewBtn.setForeground(new Color(0x758BED));
+        calendarViewBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0xBBC4F4), 1));
         calendarViewBtn.setToolTipText("Display month view in CLI format with events marked");
         calendarViewBtn.addActionListener(e -> showCalendarViewDialog());
 
@@ -178,7 +178,7 @@ public class CalendarGUI {
         frame.add(featureButtonsPanel, BorderLayout.AFTER_LINE_ENDS);
 
         monthGrid = new JPanel(new GridLayout(0, 7, 4, 4));
-        monthGrid.setBackground(Color.WHITE);
+        monthGrid.setBackground(new Color(0xCED4EB));
         frame.add(monthGrid, BorderLayout.CENTER);
 
         // Add keyboard listener to frame for global shortcuts
@@ -227,7 +227,7 @@ public class CalendarGUI {
         detailsArea = new JTextArea();
         detailsArea.setEditable(false);
         detailsArea.setBackground(Color.WHITE);
-        detailsArea.setForeground(new Color(0x333333)); // Dark gray text
+        detailsArea.setForeground(new Color(0x8688AD)); // Dark gray text
         detailsArea.setFont(detailsArea.getFont().deriveFont(13f));
         JScrollPane scroll = new JScrollPane(detailsArea);
         scroll.setPreferredSize(new Dimension(1000, 180));
@@ -236,12 +236,12 @@ public class CalendarGUI {
 
         // Add help panel at bottom with keyboard shortcuts
         JPanel helpPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        helpPanel.setBackground(new Color(0xF5F5F5));
+        helpPanel.setBackground(new Color(0xE9EEF4));
         helpPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
         JLabel helpLabel = new JLabel("<html><b>Keyboard Shortcuts:</b> ◀/▶ or ←/→ or P/N = Navigate months | T = Today | " +
                 "<b>Mouse Wheel:</b> Scroll over calendar to change month | " +
                 "<b>Hover:</b> Tooltips on buttons for more info</html>");
-        helpLabel.setForeground(new Color(0x666666));
+        helpLabel.setForeground(new Color(0x8688AD));
         helpLabel.setFont(helpLabel.getFont().deriveFont(11f));
         helpPanel.add(helpLabel);
         frame.add(helpPanel, BorderLayout.AFTER_LAST_LINE);
@@ -787,18 +787,26 @@ public class CalendarGUI {
                 // Display in bottom panel
                 detailsArea.setText(sb.toString());
 
-                // Also show in pop-up dialog for immediate visibility
+                // Also show in a separate "screen" (JFrame) like calendar view
                 JTextArea resultArea = new JTextArea(sb.toString());
                 resultArea.setEditable(false);
                 resultArea.setLineWrap(true);
                 resultArea.setWrapStyleWord(true);
                 resultArea.setCaretPosition(0);
                 JScrollPane scrollPane = new JScrollPane(resultArea);
-                scrollPane.setPreferredSize(new Dimension(700, 400));
 
-                JOptionPane.showMessageDialog(frame, scrollPane,
-                        "List View: " + start + " to " + end + " (Found " + filteredEvents.size() + " events)",
-                        JOptionPane.INFORMATION_MESSAGE);
+                // CHANGED: use JFrame (JDialog has no setExtendedState)
+                JFrame listFrame = new JFrame(
+                        "List View: " + start + " to " + end + " (Found " + filteredEvents.size() + " events)"
+                );
+                listFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                listFrame.setLayout(new BorderLayout());
+                listFrame.add(scrollPane, BorderLayout.CENTER);
+
+                listFrame.setSize(1200, 800);
+                listFrame.setLocationRelativeTo(frame);
+                listFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); // full-screen behavior
+                listFrame.setVisible(true);
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(frame, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -872,7 +880,6 @@ public class CalendarGUI {
                 resultArea.setLineWrap(true);
                 resultArea.setWrapStyleWord(true);
                 resultArea.setCaretPosition(0);
-                resultArea.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));  // Monospace for alignment
                 JScrollPane scrollPane = new JScrollPane(resultArea);
                 scrollPane.setPreferredSize(new Dimension(600, 300));
 
@@ -941,13 +948,15 @@ public class CalendarGUI {
                 "1 day before",
                 "Custom Hours",
                 "Custom Days",
-                "Custom Minutes"
+                "Custom Minutes",
+                "Custom Months"
         });
         reminderTypeBox.setSelectedIndex(1); // Default: 30 minutes
 
         JSpinner minutesSpinner = new JSpinner(new javax.swing.SpinnerNumberModel(30, 1, 1440, 5));
         JSpinner hoursSpinner = new JSpinner(new javax.swing.SpinnerNumberModel(1, 1, 72, 1));
         JSpinner daysSpinner = new JSpinner(new javax.swing.SpinnerNumberModel(1, 1, 365, 1));
+        JSpinner monthsSpinner = new JSpinner(new javax.swing.SpinnerNumberModel(1, 1, 12, 1));
 
         p.add(new JLabel("Reminder Type:"));
         p.add(reminderTypeBox);
@@ -957,6 +966,8 @@ public class CalendarGUI {
         p.add(daysSpinner);
         p.add(new JLabel("Custom Minutes:"));
         p.add(minutesSpinner);
+        p.add(new JLabel("Custom Months:"));
+        p.add(monthsSpinner);
 
         int res = JOptionPane.showConfirmDialog(frame, p, "Reminders Settings", JOptionPane.OK_CANCEL_OPTION);
         if (res == JOptionPane.OK_OPTION) {
@@ -983,6 +994,9 @@ public class CalendarGUI {
                     minutes = days * 1440;
                 } else if (selectedType.contains("Custom Minutes")) {
                     minutes = (Integer) minutesSpinner.getValue();
+                } else if (selectedType.contains("Custom Months")) {
+                    int months = (Integer) monthsSpinner.getValue();
+                    minutes = months * 43200; // 30 days per month approximation
                 }
 
                 java.time.LocalDateTime now = java.time.LocalDateTime.now();
@@ -1115,10 +1129,10 @@ public class CalendarGUI {
         for (String d : days) {
             JLabel lbl = new JLabel(d, SwingConstants.CENTER);
             lbl.setFont(lbl.getFont().deriveFont(Font.BOLD));
-            lbl.setForeground(new Color(0x999999)); // Light gray text
+            lbl.setForeground(new Color(0x8688AD)); // Muted purple-grey text
             lbl.setBackground(monthColor);
             lbl.setOpaque(true);
-            lbl.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0x333333), 2));
+            lbl.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0x758BED), 2));
             monthGrid.add(lbl);
         }
 
@@ -1128,7 +1142,7 @@ public class CalendarGUI {
             JLabel emptyLbl = new JLabel("");
             emptyLbl.setBackground(monthColor);
             emptyLbl.setOpaque(true);
-            emptyLbl.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0x333333), 2));
+            emptyLbl.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0x758BED), 2));
             monthGrid.add(emptyLbl);
         }
 
@@ -1140,9 +1154,9 @@ public class CalendarGUI {
             boolean hasEvents = !dayEvents.isEmpty();
             JButton dayBtn = new JButton(String.valueOf(day) + (hasEvents ? " •" : ""));
             dayBtn.setBackground(monthColor);
-            dayBtn.setForeground(hasEvents ? new Color(0x007AFF) : new Color(0x333333)); // iOS blue for event days, dark gray for regular
+            dayBtn.setForeground(hasEvents ? new Color(0x758BED) : new Color(0x8688AD)); // Blue for event days, dark gray for regular
             dayBtn.setOpaque(true);
-            dayBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0x333333), 2));
+            dayBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0x758BED), 2));
             dayBtn.setFont(dayBtn.getFont().deriveFont(14f));
 
             // Set tooltip showing event details when hovering over a day with events
@@ -1171,7 +1185,7 @@ public class CalendarGUI {
             JLabel emptyLbl = new JLabel("");
             emptyLbl.setBackground(monthColor);
             emptyLbl.setOpaque(true);
-            emptyLbl.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0x333333), 2));
+            emptyLbl.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0x758BED), 2));
             monthGrid.add(emptyLbl);
         }
 
@@ -1244,6 +1258,10 @@ public class CalendarGUI {
 
         if (allEvents.isEmpty()) {
             detailsArea.setText("📊 No events to analyze.");
+            JOptionPane.showMessageDialog(frame,
+                    "No events yet. Add events to see statistics.",
+                    "Statistics",
+                    JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 

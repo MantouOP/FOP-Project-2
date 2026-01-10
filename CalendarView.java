@@ -1,7 +1,9 @@
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -80,27 +82,24 @@ public class CalendarView {
     public void displayWeekView(LocalDate weekStart, List<Event> events) {
         System.out.println("\n=== Week of " + DATE_FORMATTER.format(weekStart) + " ===");
 
-        // Group events by date
         Map<LocalDate, List<Event>> eventsByDate = events.stream()
                 .collect(Collectors.groupingBy(e -> e.getStartDateTime().toLocalDate()));
 
-        // Display each day of the week
         for (int i = 0; i < 7; i++) {
             LocalDate currentDate = weekStart.plusDays(i);
             List<Event> dayEvents = eventsByDate.getOrDefault(currentDate, List.of());
-            
-            String dayName = currentDate.getDayOfWeek().toString().substring(0, 3);
-            System.out.printf("%s %02d: ", dayName, currentDate.getDayOfMonth());
+
+            String dayName = currentDate.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH); // e.g., Sun
+            String prefix = String.format("%s %02d: ", dayName, currentDate.getDayOfMonth());
 
             if (dayEvents.isEmpty()) {
-                System.out.println("No events");
+                System.out.println(prefix + "No events");
             } else {
-                dayEvents.stream()
+                String line = dayEvents.stream()
                         .sorted((e1, e2) -> e1.getStartDateTime().compareTo(e2.getStartDateTime()))
-                        .forEach(event -> System.out.printf("%s (%s) ", 
-                            event.getTitle(), 
-                            TIME_FORMATTER.format(event.getStartDateTime())));
-                System.out.println();
+                        .map(ev -> ev.getTitle() + " (" + TIME_FORMATTER.format(ev.getStartDateTime()) + ")")
+                        .collect(Collectors.joining(", "));
+                System.out.println(prefix + line);
             }
         }
     }
