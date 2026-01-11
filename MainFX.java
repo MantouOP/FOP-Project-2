@@ -509,6 +509,8 @@ public class MainFX extends Application {
 
         ListView<Event> results = new ListView<>();
         results.setCellFactory(createEventCellFactory());
+        results.setPrefHeight(200);
+        results.setMaxHeight(250);
 
         Button run = new Button("Search");
         run.getStyleClass().add("primary-button");
@@ -557,10 +559,22 @@ public class MainFX extends Application {
             results.getItems().setAll(matches);
         });
 
+        Button clearBtn = new Button("Clear");
+        clearBtn.getStyleClass().add("primary-button");
+        clearBtn.setOnAction(e -> {
+            titleField.clear();
+            descField.clear();
+            idField.clear();
+            startField.setText(dateFmt.format(selectedDate));
+            endField.setText(dateFmt.format(selectedDate));
+            upcomingBox.setSelected(false);
+            results.getItems().clear();
+        });
+
         GridPane form = new GridPane();
-        form.setHgap(8);
-        form.setVgap(8);
-        form.setPadding(new Insets(10));
+        form.setHgap(6);
+        form.setVgap(5);
+        form.setPadding(new Insets(8));
         form.getStyleClass().add("dialog-form");
         int r = 0;
         form.addRow(r++, new Label("Title contains"), titleField);
@@ -570,8 +584,9 @@ public class MainFX extends Application {
         form.addRow(r++, new Label("End date (yyyy-MM-dd)"), endField);
         form.addRow(r++, upcomingBox);
 
-        VBox box = new VBox(10, form, run, results);
-        box.setPadding(new Insets(10));
+        HBox buttonBox = new HBox(10, run, clearBtn);
+        VBox box = new VBox(8, form, buttonBox, results);
+        box.setPadding(new Insets(8));
         dialog.getDialogPane().setContent(box);
         dialog.showAndWait();
     }
@@ -1030,9 +1045,9 @@ public class MainFX extends Application {
         dialog.setTitle("Statistics");
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.CLOSE);
 
-        // Make dialog very large
+        // Set dialog to a more compact size
         dialog.setResizable(true);
-        dialog.getDialogPane().setPrefSize(1400, 900);
+        dialog.getDialogPane().setPrefSize(900, 600);
         dialog.getDialogPane().setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         List<Event> all = eventManager.getAllEvents();
@@ -1160,9 +1175,10 @@ public class MainFX extends Application {
         TextArea area = new TextArea(sb.toString());
         area.setEditable(false);
         area.setWrapText(true);
-        area.setFont(Font.font("Monospaced", 14));
-        area.setPrefSize(1150, 750);
+        area.setFont(Font.font("Monospaced", 12));
+        area.setPrefSize(800, 500);
         area.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        area.setStyle("-fx-text-alignment: center;");
 
         VBox box = new VBox(area);
         box.setPadding(new Insets(10));
