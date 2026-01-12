@@ -198,6 +198,16 @@ public class EventManager {
     }
 
     /**
+     * Find recurring event configuration by event ID
+     */
+    public RecurringEvent getRecurringEventByEventId(int eventId) {
+        return recurringEvents.stream()
+                   .filter(re -> re.getEventId() == eventId)
+                   .findFirst()
+                   .orElse(null);
+    }
+
+    /**
      * Get all events
      */
     public List<Event> getAllEvents() {
