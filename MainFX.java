@@ -333,7 +333,7 @@ public class MainFX extends Application {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setText(null);
-                    setFont(null);
+                    setGraphic(null);
                     setStyle(""); // Clear any previous style
                     setPrefHeight(0); // Set height to 0 to hide empty cells
                     setMaxHeight(0);
