@@ -1,7 +1,5 @@
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -36,7 +34,6 @@ public class MainFX extends Application {
     private final DateTimeFormatter dateDisplayFmt = DateTimeFormatter.ofPattern("d MMM yyyy");
 
     private EventManager eventManager;
-    private ReminderManager reminderManager;
 
     private YearMonth currentYearMonth;
     private LocalDate selectedDate;
@@ -49,7 +46,6 @@ public class MainFX extends Application {
     public void start(Stage primaryStage) {
         Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
         eventManager = new EventManager();
-        reminderManager = new ReminderManager(eventManager);
 
         currentYearMonth = YearMonth.now();
         selectedDate = LocalDate.now();
@@ -63,10 +59,10 @@ public class MainFX extends Application {
         header.setAlignment(Pos.CENTER);
         Button btnPrev = new Button("<< Previous");
         btnPrev.getStyleClass().add("primary-button");
-        btnPrev.setOnAction(e -> previousMonth());
+        btnPrev.setOnAction(_ -> previousMonth());
         Button btnNext = new Button("Next >>");
         btnNext.getStyleClass().add("primary-button");
-        btnNext.setOnAction(e -> nextMonth());
+        btnNext.setOnAction(_ -> nextMonth());
         calendarTitle = new Text();
         calendarTitle.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         calendarTitle.setFill(Color.WHITE);
@@ -77,34 +73,34 @@ public class MainFX extends Application {
         featureBar.setAlignment(Pos.CENTER_LEFT);
         Button addBtnTop = new Button("Add Event");
         addBtnTop.getStyleClass().add("primary-button");
-        addBtnTop.setOnAction(e -> showCreateDialog(primaryStage));
+        addBtnTop.setOnAction(_ -> showCreateDialog(primaryStage));
         Button recurBtnTop = new Button("Recurring Event");
         recurBtnTop.getStyleClass().add("primary-button");
-        recurBtnTop.setOnAction(e -> showRecurringDialog(primaryStage));
+        recurBtnTop.setOnAction(_ -> showRecurringDialog(primaryStage));
         Button searchBtnTop = new Button("Search");
         searchBtnTop.getStyleClass().add("primary-button");
-        searchBtnTop.setOnAction(e -> showSearchDialog(primaryStage));
+        searchBtnTop.setOnAction(_ -> showSearchDialog(primaryStage));
         Button editBtnTop = new Button("Edit");
         editBtnTop.getStyleClass().add("primary-button");
-        editBtnTop.setOnAction(e -> showEditDialog(primaryStage));
+        editBtnTop.setOnAction(_ -> showEditDialog(primaryStage));
         Button deleteBtnTop = new Button("Delete");
         deleteBtnTop.getStyleClass().add("primary-button");
-        deleteBtnTop.setOnAction(e -> showDeleteDialog(primaryStage));
+        deleteBtnTop.setOnAction(_ -> showDeleteDialog(primaryStage));
         Button calBtnTop = new Button("Calendar View");
         calBtnTop.getStyleClass().add("primary-button");
-        calBtnTop.setOnAction(e -> showCalendarViewDialog(primaryStage));
+        calBtnTop.setOnAction(_ -> showCalendarViewDialog(primaryStage));
         Button listBtnTop = new Button("List View");
         listBtnTop.getStyleClass().add("primary-button");
-        listBtnTop.setOnAction(e -> showListViewDialog(primaryStage));
+        listBtnTop.setOnAction(_ -> showListViewDialog(primaryStage));
         Button remindersBtnTop = new Button("Reminders");
         remindersBtnTop.getStyleClass().add("primary-button");
-        remindersBtnTop.setOnAction(e -> showRemindersDialog(primaryStage));
+        remindersBtnTop.setOnAction(_ -> showRemindersDialog(primaryStage));
         Button backupBtnTop = new Button("Backup/Restore");
         backupBtnTop.getStyleClass().add("primary-button");
-        backupBtnTop.setOnAction(e -> showBackupDialog(primaryStage));
+        backupBtnTop.setOnAction(_ -> showBackupDialog(primaryStage));
         Button statsBtnTop = new Button("Statistics");
         statsBtnTop.getStyleClass().add("primary-button");
-        statsBtnTop.setOnAction(e -> showStatsDialog(primaryStage));
+        statsBtnTop.setOnAction(_ -> showStatsDialog(primaryStage));
         featureBar.getChildren().addAll(addBtnTop, recurBtnTop, searchBtnTop, editBtnTop, deleteBtnTop, calBtnTop, listBtnTop, remindersBtnTop, backupBtnTop, statsBtnTop);
 
         VBox topContainer = new VBox(10, header, featureBar);
@@ -242,7 +238,7 @@ public class MainFX extends Application {
 
             // Add click handler for this day cell
             final VBox cellNode = dayNode;
-            dayNode.setOnMouseClicked(e -> {
+            dayNode.setOnMouseClicked(_ -> {
                 System.out.println("Day clicked: " + date);
 
                 javafx.application.Platform.runLater(() -> {
@@ -327,7 +323,7 @@ public class MainFX extends Application {
 
     // Helper method to create event cell factory for ListViews
     private javafx.util.Callback<ListView<Event>, ListCell<Event>> createEventCellFactory() {
-        return view -> new ListCell<>() {
+        return _ -> new ListCell<>() {
             @Override
             protected void updateItem(Event item, boolean empty) {
                 super.updateItem(item, empty);
@@ -391,18 +387,14 @@ public class MainFX extends Application {
         });
 
         dialog.showAndWait().ifPresent(ev -> {
-            if (ev != null) {
-                System.out.println("Event created: " + ev.getTitle() + " (ID: " + ev.getEventId() + ")");
-                populateCalendar(currentYearMonth); // Refresh calendar to show new event
-                // Show success message with event details
-                String successMsg = String.format("Event created successfully!\n\nTitle: %s\nStart: %s\nEnd: %s",
-                        ev.getTitle(),
-                        dateTimeFmt.format(ev.getStartDateTime()),
-                        dateTimeFmt.format(ev.getEndDateTime()));
-                showAlert("Event Created", successMsg);
-            } else {
-                System.out.println("Event creation returned null");
-            }
+            System.out.println("Event created: " + ev.getTitle() + " (ID: " + ev.getEventId() + ")");
+            populateCalendar(currentYearMonth); // Refresh calendar to show new event
+            // Show success message with event details
+            String successMsg = String.format("Event created successfully!\n\nTitle: %s\nStart: %s\nEnd: %s",
+                    ev.getTitle(),
+                    dateTimeFmt.format(ev.getStartDateTime()),
+                    dateTimeFmt.format(ev.getEndDateTime()));
+            showAlert("Event Created", successMsg);
         });
     }
 
@@ -494,25 +486,75 @@ public class MainFX extends Application {
         });
 
         dialog.showAndWait().ifPresent(ev -> {
-            if (ev != null) {
-                System.out.println("Recurring event created: " + ev.getTitle() + " (ID: " + ev.getEventId() + ")");
-                populateCalendar(currentYearMonth); // Refresh calendar
-                // Show success message with recurring event details
-                RecurringEvent recEvent = eventManager.getRecurringEventByEventId(ev.getEventId());
-                if (recEvent != null) {
-                    String successMsg = String.format("Recurring event created successfully!\n\nTitle: %s\nStart: %s\nEnd: %s\nInterval: %s\nOccurrences: %d",
-                            ev.getTitle(),
-                            dateTimeFmt.format(ev.getStartDateTime()),
-                            dateTimeFmt.format(ev.getEndDateTime()),
-                            recEvent.getRecurrentInterval(),
-                            recEvent.getRecurrentTimes());
-                    showAlert("Recurring Event Created", successMsg);
+            System.out.println("\n=== RECURRING EVENT CREATED ===");
+            System.out.println("Main Event: " + ev.getTitle() + " (ID: " + ev.getEventId() + ")");
+            System.out.println("Debug: Attempting to retrieve recurring configuration...");
+
+            // Get recurring configuration
+            RecurringEvent recEvent = eventManager.getRecurringEventByEventId(ev.getEventId());
+
+            System.out.println("Debug: recEvent is " + (recEvent == null ? "NULL" : "NOT NULL"));
+
+            if (recEvent != null) {
+                System.out.println("Interval: " + recEvent.getRecurrentInterval());
+                System.out.println("Occurrences: " + recEvent.getRecurrentTimes());
+
+                // Get all events from the system
+                List<Event> allEventsInSystem = eventManager.getAllEvents();
+                System.out.println("Debug: Total events in system: " + allEventsInSystem.size());
+
+                // Get and display all generated event instances
+                List<Event> allEvents = allEventsInSystem.stream()
+                    .filter(e -> e.getTitle().equals(ev.getTitle()))
+                    .sorted(java.util.Comparator.comparing(Event::getStartDateTime))
+                    .toList();
+
+                System.out.println("Debug: Events matching title '" + ev.getTitle() + "': " + allEvents.size());
+
+                System.out.println("\n📅 All Generated Event Instances (" + allEvents.size() + " total):");
+                System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+                if (allEvents.isEmpty()) {
+                    System.out.println("  WARNING: No events found! This should not happen.");
                 } else {
-                    showAlert("Event Created", "Event created successfully!");
+                    for (int i = 0; i < allEvents.size(); i++) {
+                        Event e = allEvents.get(i);
+                        System.out.printf("  #%d - ID: %d | Title: \"%s\" | %s to %s%n",
+                            i + 1,
+                            e.getEventId(),
+                            e.getTitle(),
+                            dateTimeFmt.format(e.getStartDateTime()),
+                            dateTimeFmt.format(e.getEndDateTime()));
+                    }
                 }
+
+                System.out.println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                System.out.println("✓ Recurring event series created successfully!");
+                System.out.println("Total Events Generated: " + allEvents.size());
+                System.out.println("===============================\n");
+
+                // Force flush to ensure console output appears
+                System.out.flush();
+
+                // Show success message with recurring event details
+                String successMsg = String.format("Recurring event created successfully!\n\nTitle: %s\nStart: %s\nEnd: %s\nInterval: %s\nOccurrences: %d\nTotal Events Generated: %d",
+                        ev.getTitle(),
+                        dateTimeFmt.format(ev.getStartDateTime()),
+                        dateTimeFmt.format(ev.getEndDateTime()),
+                        recEvent.getRecurrentInterval(),
+                        recEvent.getRecurrentTimes(),
+                        allEvents.size());
+
+                showAlert("Recurring Event Created", successMsg);
             } else {
-                System.out.println("Recurring event creation returned null");
+                System.out.println("ERROR: RecurringEvent configuration is NULL!");
+                System.out.println("This means the recurring event was not properly saved.");
+                System.out.println("Falling back to simple event creation message.");
+                System.out.println("===============================\n");
+                showAlert("Event Created", "Event created successfully!");
             }
+
+            populateCalendar(currentYearMonth); // Refresh calendar
         });
     }
 
@@ -601,7 +643,6 @@ public class MainFX extends Application {
                 if (!endField.getText().isBlank()) endDate = LocalDate.parse(endField.getText(), dateFmt);
             } catch (Exception ex) {
                 startDate = null;
-                endDate = null;
             }
             Integer idFilter = null;
             try {
@@ -648,8 +689,7 @@ public class MainFX extends Application {
                             LocalDate evEnd = ev.getEndDateTime().toLocalDate();
                             if (evStart.isAfter(t) || evEnd.isBefore(s)) return false;
                         }
-                        if (upcomingOnly && !ev.getStartDateTime().isAfter(LocalDateTime.now())) return false;
-                        return true;
+                        return !upcomingOnly || ev.getStartDateTime().isAfter(LocalDateTime.now());
                     })
                     .sorted(java.util.Comparator.comparing(Event::getStartDateTime))
                     .toList();
@@ -690,12 +730,12 @@ public class MainFX extends Application {
             }
         };
 
-        run.setOnAction(e -> {
+        run.setOnAction(_ -> {
             System.out.println("Search button clicked");
             performSearch.run();
         });
 
-        showAllBtn.setOnAction(e -> {
+        showAllBtn.setOnAction(_ -> {
             System.out.println("\n📋 SHOW ALL button clicked!");
             System.out.println("Loading all events...");
 
@@ -736,7 +776,7 @@ public class MainFX extends Application {
         form.addRow(r++, new Label("Event ID (exact)"), idField);
         form.addRow(r++, new Label("Start date (yyyy-MM-dd)"), startField);
         form.addRow(r++, new Label("End date (yyyy-MM-dd)"), endField);
-        form.addRow(r++, upcomingBox);
+        form.addRow(r, upcomingBox);
 
         HBox buttonBox = new HBox(10, run, showAllBtn);
         VBox box = new VBox(8, form, buttonBox, resultCountLabel, results);
@@ -992,8 +1032,8 @@ public class MainFX extends Application {
             System.out.println("====================\n");
         };
 
-        viewType.valueProperty().addListener((obs, o, n) -> render.run());
-        datePicker.valueProperty().addListener((obs, o, n) -> render.run());
+        viewType.valueProperty().addListener((_, _, _) -> render.run());
+        datePicker.valueProperty().addListener((_, _, _) -> render.run());
 
         render.run();
 
@@ -1035,7 +1075,7 @@ public class MainFX extends Application {
 
         Button load = new Button("Load");
         load.getStyleClass().add("primary-button");
-        load.setOnAction(e -> {
+        load.setOnAction(_ -> {
             try {
                 System.out.println("\nLoading events for list view...");
                 LocalDate s = LocalDate.parse(startField.getText(), dateFmt);
@@ -1118,7 +1158,7 @@ public class MainFX extends Application {
             hoursSpinner.setDisable(!ch);
             daysSpinner.setDisable(!cd);
         };
-        typeBox.setOnAction(e -> refreshInputs.run());
+        typeBox.setOnAction(_ -> refreshInputs.run());
         refreshInputs.run();
 
         ListView<Event> list = new ListView<>();
@@ -1181,12 +1221,12 @@ public class MainFX extends Application {
             }
         };
 
-        load.setOnAction(e -> {
+        load.setOnAction(_ -> {
             System.out.println("Show upcoming button clicked");
             loadReminders.run();
         });
 
-        showAllBtn.setOnAction(e -> {
+        showAllBtn.setOnAction(_ -> {
             System.out.println("\n📋 SHOW ALL button clicked!");
             System.out.println("Loading all upcoming events...");
 
@@ -1264,17 +1304,17 @@ public class MainFX extends Application {
         }
 
         if (hours > 0) {
-            if (result.length() > 0) result.append(", ");
+            if (!result.isEmpty()) result.append(", ");
             result.append(hours).append(hours == 1 ? " hour" : " hours");
         }
 
         if (minutes > 0) {
-            if (result.length() > 0) result.append(", ");
+            if (!result.isEmpty()) result.append(", ");
             result.append(minutes).append(" min");
         }
 
         // If only days (no hours or minutes), still show it
-        if (result.length() == 0) {
+        if (result.isEmpty()) {
             result.append("0 min");
         }
 
@@ -1322,7 +1362,7 @@ public class MainFX extends Application {
         TextField backupPath = new TextField("backup.csv");
         backupPath.setPrefWidth(300);
         Button browseSaveBtn = new Button("Browse...");
-        browseSaveBtn.setOnAction(e -> {
+        browseSaveBtn.setOnAction(_ -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Save Backup File");
             fileChooser.getExtensionFilters().add(
@@ -1340,7 +1380,7 @@ public class MainFX extends Application {
 
         Button backupBtn = new Button("Create Backup");
         backupBtn.getStyleClass().add("primary-button");
-        backupBtn.setOnAction(e -> {
+        backupBtn.setOnAction(_ -> {
             System.out.println("\nCreating backup...");
             System.out.println("  Backup file: " + backupPath.getText());
             System.out.println("  Total events: " + eventManager.getAllEvents().size());
@@ -1362,7 +1402,7 @@ public class MainFX extends Application {
         TextField restorePath = new TextField("backup.csv");
         restorePath.setPrefWidth(300);
         Button browseOpenBtn = new Button("Browse...");
-        browseOpenBtn.setOnAction(e -> {
+        browseOpenBtn.setOnAction(_ -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Backup File");
             fileChooser.getExtensionFilters().add(
@@ -1380,7 +1420,7 @@ public class MainFX extends Application {
         CheckBox appendBox = new CheckBox("Append (otherwise replace)");
         Button restoreBtn = new Button("Restore");
         restoreBtn.getStyleClass().add("primary-button");
-        restoreBtn.setOnAction(e -> {
+        restoreBtn.setOnAction(_ -> {
             System.out.println("\nRestoring from backup...");
             System.out.println("  Backup file: " + restorePath.getText());
             System.out.println("  Mode: " + (appendBox.isSelected() ? "Append" : "Replace"));
@@ -1522,7 +1562,7 @@ public class MainFX extends Application {
         sb.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
         long morning = all.stream().filter(e -> e.getStartDateTime().getHour() >= 6 && e.getStartDateTime().getHour() < 12).count();
         long afternoon = all.stream().filter(e -> e.getStartDateTime().getHour() >= 12 && e.getStartDateTime().getHour() < 18).count();
-        long evening = all.stream().filter(e -> e.getStartDateTime().getHour() >= 18 && e.getStartDateTime().getHour() < 24).count();
+        long evening = all.stream().filter(e -> e.getStartDateTime().getHour() >= 18).count();
         long night = all.stream().filter(e -> e.getStartDateTime().getHour() < 6).count();
         long total = all.size();
         sb.append(String.format("Morning (6-12): %d (%.1f%%)%n", morning, morning * 100.0 / total));
@@ -1585,10 +1625,10 @@ public class MainFX extends Application {
         System.out.println("  Time distribution: Morning=" + morning + ", Afternoon=" + afternoon + ", Evening=" + evening + ", Night=" + night);
 
         // Busiest date
-        var busiestDate = eventsByDate.entrySet().stream().max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).orElse(null);
-        if (busiestDate != null) {
+        eventsByDate.entrySet().stream().max(Map.Entry.comparingByValue()).ifPresent(entry -> {
+            LocalDate busiestDate = entry.getKey();
             System.out.println("  Busiest date: " + busiestDate + " (" + eventsByDate.get(busiestDate) + " events)");
-        }
+        });
 
         // Schedule assessment
         System.out.println("  Schedule assessment: " +
@@ -1668,9 +1708,7 @@ public class MainFX extends Application {
                         showAlert("Invalid range", "End time must be after start time.");
                         return false;
                     }
-                    final LocalDateTime startFinal = start;
-                    final LocalDateTime endFinal = end;
-                    List<Event> conflicts = eventManager.checkConflicts(startFinal, endFinal).stream()
+                    List<Event> conflicts = eventManager.checkConflicts(start, end).stream()
                             .filter(ev -> ev.getEventId() != sel.getEventId())
                             .toList();
                     if (!conflicts.isEmpty()) {
@@ -1687,10 +1725,10 @@ public class MainFX extends Application {
                     System.out.println("\nUpdating event ID " + sel.getEventId() + ":");
                     System.out.println("  Old Title: \"" + sel.getTitle() + "\" → New Title: \"" + titleField.getText() + "\"");
                     System.out.println("  Old Description: \"" + sel.getDescription() + "\" → New Description: \"" + descField.getText() + "\"");
-                    System.out.println("  Old Start: " + dateTimeFmt.format(sel.getStartDateTime()) + " → New Start: " + dateTimeFmt.format(startFinal));
-                    System.out.println("  Old End: " + dateTimeFmt.format(sel.getEndDateTime()) + " → New End: " + dateTimeFmt.format(endFinal));
+                    System.out.println("  Old Start: " + dateTimeFmt.format(sel.getStartDateTime()) + " → New Start: " + dateTimeFmt.format(start));
+                    System.out.println("  Old End: " + dateTimeFmt.format(sel.getEndDateTime()) + " → New End: " + dateTimeFmt.format(end));
 
-                    boolean success = eventManager.updateEvent(sel.getEventId(), titleField.getText(), descField.getText(), startFinal, endFinal);
+                    boolean success = eventManager.updateEvent(sel.getEventId(), titleField.getText(), descField.getText(), start, end);
                     if (success) {
                         System.out.println("✓ Event updated successfully!");
                         showAlert("Success", "Event updated successfully!");
@@ -1717,9 +1755,6 @@ public class MainFX extends Application {
         });
     }
 
-    private void deleteSelected() {
-        showDeleteDialog(null);
-    }
 
     private void showDeleteDialog(Stage owner) {
         System.out.println("\n=== DELETE EVENT ===");
@@ -1758,8 +1793,7 @@ public class MainFX extends Application {
             List<Event> matches = all.stream()
                     .filter(ev -> {
                         if (idValFinal != null && ev.getEventId() != idValFinal) return false;
-                        if (!titleKw.isBlank() && !ev.getTitle().toLowerCase().contains(titleKw)) return false;
-                        return true;
+                        return titleKw.isBlank() || ev.getTitle().toLowerCase().contains(titleKw);
                     })
                     .toList();
 
@@ -1776,11 +1810,11 @@ public class MainFX extends Application {
 
         Button findBtn = new Button("Find");
         findBtn.getStyleClass().add("primary-button");
-        findBtn.setOnAction(e -> performSearch.run());
+        findBtn.setOnAction(_ -> performSearch.run());
 
         Button deleteBtn = new Button("Delete Selected");
         deleteBtn.getStyleClass().add("primary-button");
-        deleteBtn.setOnAction(e -> {
+        deleteBtn.setOnAction(_ -> {
             Event target = results.getSelectionModel().getSelectedItem();
             if (target == null) {
                 System.out.println("✗ No event selected for deletion");
@@ -1896,7 +1930,7 @@ public class MainFX extends Application {
                         .toList();
 
                 if (matches.isEmpty()) {
-                    String criteria = "";
+                    String criteria;
                     if (idVal != null && !titleKw.isBlank()) {
                         criteria = "ID '" + idVal + "' or title containing '" + titleText + "'";
                     } else if (idVal != null) {
@@ -1909,7 +1943,7 @@ public class MainFX extends Application {
                 }
 
                 if (matches.size() == 1) {
-                    return matches.get(0);
+                    return matches.getFirst();
                 }
 
                 // Multiple matches - let user choose
@@ -1921,7 +1955,7 @@ public class MainFX extends Application {
                             return label;
                         })
                         .toList();
-                ChoiceDialog<String> chooser = new ChoiceDialog<>(labels.get(0), labels);
+                ChoiceDialog<String> chooser = new ChoiceDialog<>(labels.getFirst(), labels);
                 chooser.setTitle("Choose Event");
                 chooser.setHeaderText("Multiple matches found (" + matches.size() + " events)");
                 chooser.setContentText("Select event:");
@@ -1933,7 +1967,7 @@ public class MainFX extends Application {
         return dialog.showAndWait().orElse(null);
     }
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         launch(args);
     }
 }
