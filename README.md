@@ -1,5 +1,11 @@
 # JavaFX Calendar Application
 
+[![GitHub Repository](https://img.shields.io/badge/GitHub-FOP--Project--2-blue?style=flat&logo=github)](https://github.com/MantouOP/FOP-Project-2)
+
+**Repository**: [https://github.com/MantouOP/FOP-Project-2](https://github.com/MantouOP/FOP-Project-2)
+
+---
+
 A comprehensive, feature-rich calendar application built with JavaFX that provides event management, recurring events, reminders, statistics, and data backup capabilities.
 
 ## 📋 Project Summary
@@ -90,11 +96,11 @@ Before running this application, ensure you have the following installed:
 ### 1. Clone or Download the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/MantouOP/FOP-Project-2.git
 cd FOP-Project-2
 ```
 
-Or download the ZIP file and extract it to your desired location.
+Or download the ZIP file from [GitHub](https://github.com/MantouOP/FOP-Project-2) and extract it to your desired location.
 
 ### 2. Verify Project Structure
 
