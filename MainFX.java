@@ -462,7 +462,6 @@ public class MainFX extends Application {
         ComboBox<String> intervalBox = new ComboBox<>(FXCollections.observableArrayList("Daily", "Weekly", "Bi-Weekly", "Monthly"));
         intervalBox.getSelectionModel().selectFirst();
         TextField timesField = new TextField("5");
-        TextField endDateField = new TextField(""); // optional
 
         GridPane form = new GridPane();
         form.setHgap(8);
@@ -474,13 +473,12 @@ public class MainFX extends Application {
         form.addRow(2, new Label("Start (yyyy-MM-dd HH:mm)"), startField);
         form.addRow(3, new Label("End (yyyy-MM-dd HH:mm)"), endField);
         form.addRow(4, new Label("Interval"), intervalBox);
-        form.addRow(5, new Label("Times (0 = until end date)"), timesField);
-        form.addRow(6, new Label("End date (yyyy-MM-dd, optional)"), endDateField);
+        form.addRow(5, new Label("Times"), timesField);
         dialog.getDialogPane().setContent(form);
 
         dialog.setResultConverter(btn -> {
             if (btn == ButtonType.OK) {
-                return createRecurringFromInputs(titleField.getText(), descField.getText(), startField.getText(), endField.getText(), intervalBox.getValue(), timesField.getText(), endDateField.getText());
+                return createRecurringFromInputs(titleField.getText(), descField.getText(), startField.getText(), endField.getText(), intervalBox.getValue(), timesField.getText());
             }
             return null;
         });
@@ -558,7 +556,7 @@ public class MainFX extends Application {
         });
     }
 
-    private Event createRecurringFromInputs(String title, String desc, String startStr, String endStr, String intervalLabel, String timesStr, String endDateStr) {
+    private Event createRecurringFromInputs(String title, String desc, String startStr, String endStr, String intervalLabel, String timesStr) {
         try {
             // Validate title is not blank
             if (title == null || title.trim().isEmpty()) {
@@ -580,13 +578,12 @@ public class MainFX extends Application {
                 default -> "1m";
             };
             int times = Integer.parseInt(timesStr);
-            LocalDate recurEnd = endDateStr.isBlank() ? null : LocalDate.parse(endDateStr, dateFmt);
-            return eventManager.createRecurringEvent(title, desc, start, end, interval, times, recurEnd);
+            return eventManager.createRecurringEvent(title, desc, start, end, interval, times, null);
         } catch (DateTimeParseException ex) {
-            showAlert("Invalid date/time", "Use format yyyy-MM-dd hh:mm AM/PM or yyyy-MM-dd HH:mm for start/end, yyyy-MM-dd for end date.");
+            showAlert("Invalid date/time", "Use format yyyy-MM-dd hh:mm AM/PM or yyyy-MM-dd HH:mm for start/end.");
             return null;
         } catch (NumberFormatException ex) {
-            showAlert("Invalid number", "Times must be a number (0 to use end date).");
+            showAlert("Invalid number", "Times must be a number.");
             return null;
         } catch (Exception ex) {
             showAlert("Error", ex.getMessage());
@@ -732,6 +729,28 @@ public class MainFX extends Application {
 
         run.setOnAction(_ -> {
             System.out.println("Search button clicked");
+
+            // Validate that at least one search criterion is provided
+            if (titleField.getText().trim().isBlank() &&
+                descField.getText().trim().isBlank() &&
+                idField.getText().trim().isBlank() &&
+                startField.getText().trim().isBlank() &&
+                endField.getText().trim().isBlank() &&
+                !upcomingBox.isSelected()) {
+                showAlert("Input Required", "Please enter at least one search criterion (Title, Description, Event ID, Start Date, End Date) or check 'Only upcoming'.");
+                return;
+            }
+
+            // Validate Event ID is a number if provided
+            if (!idField.getText().trim().isBlank()) {
+                try {
+                    Integer.parseInt(idField.getText().trim());
+                } catch (NumberFormatException e) {
+                    showAlert("Invalid Event ID", "Event ID must be a valid number.");
+                    return;
+                }
+            }
+
             performSearch.run();
         });
 
@@ -1810,7 +1829,25 @@ public class MainFX extends Application {
 
         Button findBtn = new Button("Find");
         findBtn.getStyleClass().add("primary-button");
-        findBtn.setOnAction(_ -> performSearch.run());
+        findBtn.setOnAction(_ -> {
+            // Validate that at least one field is filled
+            if (idField.getText().trim().isBlank() && titleField.getText().trim().isBlank()) {
+                showAlert("Input Required", "Please enter either an Event ID or a Title to search.");
+                return;
+            }
+
+            // Validate Event ID is a number if provided
+            if (!idField.getText().trim().isBlank()) {
+                try {
+                    Integer.parseInt(idField.getText().trim());
+                } catch (NumberFormatException e) {
+                    showAlert("Invalid Event ID", "Event ID must be a valid number.");
+                    return;
+                }
+            }
+
+            performSearch.run();
+        });
 
         Button deleteBtn = new Button("Delete Selected");
         deleteBtn.getStyleClass().add("primary-button");
